@@ -1,6 +1,6 @@
 from dataset import *
 import time
-import cPickle
+import pickle
 
 
 def get_idx(snum, filter_h=5, max_l=100):
@@ -11,7 +11,7 @@ def get_idx(snum, filter_h=5, max_l=100):
         for ind in snum:
             x.append(ind)
     else:
-        for i in xrange(max_l):
+        for i in range(max_l):
             x.append(snum[i])
     #padding the end of sentence
     while len(x) < max_l+2*pad:
@@ -80,25 +80,25 @@ def make_idx_data_cv(data, filter_h, max_l):
 
 
 if __name__ == "__main__":
-    print "load test and train raw data..."
-    testData = cPickle.load(open('test_len_60_gap_40.p'))
-    trainData = cPickle.load(open('test_len_60_gap_40.p'))
+    print("load test and train raw data...")
+    testData = pickle.load(open('test_len_60_gap_40.p'))
+    trainData = pickle.load(open('test_len_60_gap_40.p'))
 
     sentence_len = 60
     max_filter_len = 3
     now = time.strftime("%Y-%m-%d %H:%M:%S")
-    print 'point 0 time: ' + '\t\t' + str(now)
+    print('point 0 time: ' + '\t\t' + str(now))
     test = make_idx_data_cv(testData, max_filter_len, sentence_len)
     now = time.strftime("%Y-%m-%d %H:%M:%S")
-    print 'point 1 time: ' + '\t\t' + str(now)
+    print('point 1 time: ' + '\t\t' + str(now))
     train = make_idx_data_cv(trainData, max_filter_len, sentence_len)
     now = time.strftime("%Y-%m-%d %H:%M:%S")
-    print 'point 2 time: ' + '\t\t' + str(now)
+    print('point 2 time: ' + '\t\t' + str(now))
 
     f = open('test_3_60.p', 'w')
-    cPickle.dump(test, f, -1)
+    pickle.dump(test, f, -1)
     f.close()
 
     f = open('train_3_60.p', 'w')
-    cPickle.dump(train, f, -1)
+    pickle.dump(train, f, -1)
     f.close()

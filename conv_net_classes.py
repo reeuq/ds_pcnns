@@ -18,7 +18,7 @@ class HiddenLayer(object):
         self.activation = activation
 
         if W is None:
-            if activation.func_name == "ReLU":
+            if activation.__name__ == "ReLU":
                 W_values = numpy.asarray(0.01 * rng.standard_normal(size=(n_in, n_out)), dtype=theano.config.floatX)
             else:
                 W_values = numpy.asarray(rng.uniform(low=-numpy.sqrt(6. / (n_in + n_out)), high=numpy.sqrt(6. / (n_in + n_out)),
@@ -71,7 +71,7 @@ class MLPDropout(object):
         #rectified_linear_activation = lambda x: T.maximum(0.0, x)
 
         # Set up all the hidden layers
-        self.weight_matrix_sizes = zip(layer_sizes, layer_sizes[1:])
+        self.weight_matrix_sizes = list(zip(layer_sizes, layer_sizes[1:]))
         self.layers = []
         self.dropout_layers = []
         self.activations = activations
@@ -382,7 +382,7 @@ class LeNetConvPoolLayer(object):
             #right_pad_len = int(filter_shape[2]/2)
             # index_shift = pad_len-right_pad_len
             index_shift = int(filter_shape[2]/2)
-            for i in xrange(image_shape[0]):
+            for i in range(image_shape[0]):
                 #partition sentence via pool size
                 e1pos = pool_size[i, 0] + index_shift
                 e2pos = pool_size[i, 1] + index_shift
@@ -421,7 +421,7 @@ class LeNetConvPoolLayer(object):
             # right_pad_len = int(self.filter_shape[2]/2)
             # index_shift = pad_len-right_pad_len
             index_shift = int(self.filter_shape[2]/2)
-            for i in xrange(batch_size):
+            for i in range(batch_size):
                 #partition sentence via pool size
                 e1pos = pool_size[i, 0] + index_shift
                 e2pos = pool_size[i, 1] + index_shift

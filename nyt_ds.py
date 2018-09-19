@@ -5,6 +5,7 @@ from collections import OrderedDict
 import time, datetime
 import random
 import data2cv
+import pickle
 
 def parse_argv(argv):
     opts, args = getopt.getopt(sys.argv[1:], "he:s:u:b:w:c:d:i:n:",
@@ -219,11 +220,11 @@ def train_conv_net(train,
 
     #start training over mini-batches
     now = time.strftime("%Y-%m-%d %H:%M:%S")
-    print '... training start at  ' + str(now)
+    print('... training start at  ' + str(now))
     epoch = 0
     while (epoch < epochs):
-        for minibatch_index in np.random.permutation(range(n_train_batches)):
-            batch_index = range(minibatch_index * batch_size, (minibatch_index + 1) * batch_size)
+        for minibatch_index in np.random.permutation(list(range(n_train_batches))):
+            batch_index = list(range(minibatch_index * batch_size, (minibatch_index + 1) * batch_size))
             batch_rels = [train_rels[m][0] for m in batch_index]
             batch_nums = [train_nums[m] for m in batch_index]
             batch_sents = [train_sents[m] for m in batch_index]
@@ -244,20 +245,20 @@ def train_conv_net(train,
         test_predict = predict_relation(test_rels, test_nums, test_sents, test_poss, test_eposs, test_one, img_h)
         test_pr = positive_evaluation(test_predict)
         now = time.strftime("%Y-%m-%d %H:%M:%S")
-        print str(now) + '\t epoch ' + str(epoch) + ' test set PR = [' + str(test_pr[0][-1]) + ' ' + str(test_pr[1][-1]) + ']'
+        print(str(now) + '\t epoch ' + str(epoch) + ' test set PR = [' + str(test_pr[0][-1]) + ' ' + str(test_pr[1][-1]) + ']')
 
         p = test_pr[0][-1]
         r = test_pr[1][-1]
         if p > 0.25 and r > 0.25:
             save_pr(directory+'test_pr_' + str(epoch) + '.txt', test_pr)
             now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print str(now) + '\t epoch ' + str(epoch) + ' save PR result...'
-        print '\n'
+            print(str(now) + '\t epoch ' + str(epoch) + ' save PR result...')
+        print('\n')
         epoch += 1
 
 def save_model(file, params):
     f = open(file, 'w')
-    cPickle.dump(params, f, -1)
+    pickle.dump(params, f, -1)
     f.close()
 
 def save_pr(file, pr):
@@ -420,7 +421,7 @@ if __name__ == "__main__":
                 hidden_units_str+'_b_'+str(batch_size)+'_w_'+\
                 str(window_size)+'_c_'+conv_non_linear+'_d_'+\
                 str(dimension)+'_i_'+inputdir+'_n_'+str(norm)+'/'
-    print 'result dir='+resultdir
+    print('result dir='+resultdir)
     if not os.path.exists(resultdir):
         os.mkdir(resultdir)
 
@@ -431,8 +432,8 @@ if __name__ == "__main__":
         import dataset
         dataset.data2pickle(inputdir+'/train_filtered.data', inputdir+'/train.p')
 
-    testData = cPickle.load(open(inputdir+'/test.p'))
-    trainData = cPickle.load(open(inputdir+'/train.p'))
+    testData = pickle.load(open(inputdir+'/test.p'))
+    trainData = pickle.load(open(inputdir+'/train.p'))
     # testData = testData[1:5]
     # trainData = trainData[1:15]
     tmp = inputdir.split('_')
@@ -440,8 +441,8 @@ if __name__ == "__main__":
     test = data2cv.make_idx_data_cv(testData, window_size, int(tmp[3]))
     train = data2cv.make_idx_data_cv(trainData, window_size, int(tmp[3]))
 
-    print 'load Wv ...'
-    Wv = cPickle.load(open(inputdir+'/'+str(dimension)+'/Wv.p'))
+    print('load Wv ...')
+    Wv = pickle.load(open(inputdir+'/'+str(dimension)+'/Wv.p'))
 
     rng = np.random.RandomState(3435)
     PF1 = np.asarray(rng.uniform(low=-1, high=1, size=[101, 5]), dtype=theano.config.floatX)

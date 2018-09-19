@@ -1,5 +1,5 @@
 import numpy as np
-import cPickle
+import pickle
 import time, os
 
 class InstanceBag(object):
@@ -19,22 +19,22 @@ def readData(filename):
         line = f.readline()
         if not line:
             break
-        entities = map(int, line.split(' '))
+        entities = list(map(int, line.split(' ')))
         line = f.readline()
         bagLabel = line.split(' ')
 
-        rel = map(int, bagLabel[0:-1])
+        rel = list(map(int, bagLabel[0:-1]))
         num = int(bagLabel[-1])
         positions = []
         sentences = []
         entitiesPos = []
         for i in range(0, num):
             sent = f.readline().split(' ')
-            positions.append(map(int, sent[0:2]))
-            epos = map(int, sent[0:2])
+            positions.append(list(map(int, sent[0:2])))
+            epos = list(map(int, sent[0:2]))
             epos.sort()
             entitiesPos.append(epos)
-            sentences.append(map(int, sent[2:-1]))
+            sentences.append(list(map(int, sent[2:-1])))
         ins = InstanceBag(entities, rel, num, sentences, positions, entitiesPos)
         data += [ins]
     f.close()
@@ -50,7 +50,7 @@ def wv2pickle(filename='wv.txt', dim=50, outfile='Wv.p'):
     for line in allLines:
         #tmp = map(float, line.split(' '))
         #Wv[i, :] = tmp
-        Wv[i, :] = map(float, line.split(' '))
+        Wv[i, :] = list(map(float, line.split(' ')))
         i += 1
 
     rng = np.random.RandomState(3435)
@@ -58,13 +58,13 @@ def wv2pickle(filename='wv.txt', dim=50, outfile='Wv.p'):
     Wv[i, :] = rng.uniform(low=-0.5, high=0.5, size=(1, dim)) #my unknown embedding
      #save Wv
     f = open(outfile, 'w')
-    cPickle.dump(Wv, f, -1)
+    pickle.dump(Wv, f, -1)
     f.close()
 
 def data2pickle(input, output):
     data = readData(input)
     f = open(output, 'w')
-    cPickle.dump(data, f, -1)
+    pickle.dump(data, f, -1)
     f.close()
 class ProgressBar():
     def __init__(self, width=50):
