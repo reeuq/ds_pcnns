@@ -2,7 +2,6 @@
 import numpy
 import theano
 from theano.tensor.nnet import conv
-from theano.tensor.signal import downsample
 from nonlinear import *
 from theano.ifelse import ifelse
 

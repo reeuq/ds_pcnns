@@ -57,13 +57,13 @@ def wv2pickle(filename='wv.txt', dim=50, outfile='Wv.p'):
     #tmp = rng.uniform(low=-0.5, high=0.5, size=(1, dim))
     Wv[i, :] = rng.uniform(low=-0.5, high=0.5, size=(1, dim)) #my unknown embedding
      #save Wv
-    f = open(outfile, 'w')
+    f = open(outfile, 'wb')
     pickle.dump(Wv, f, -1)
     f.close()
 
 def data2pickle(input, output):
     data = readData(input)
-    f = open(output, 'w')
+    f = open(output, 'wb')
     pickle.dump(data, f, -1)
     f.close()
 class ProgressBar():

@@ -401,8 +401,19 @@ def bags_decompose(data_bags):
     return [bag_rel, bag_num, bag_sent, bag_pos, bag_epos]
 
 if __name__ == "__main__":
-    epochs, static, hidden_units_str, batch_size,\
-    window_size, conv_non_linear, dimension, inputdir, norm = parse_argv(sys.argv[1:])
+    # epochs, static, hidden_units_str, batch_size,\
+    # window_size, conv_non_linear, dimension, inputdir, norm = parse_argv(sys.argv[1:])
+
+
+    epochs = 13
+    static = False
+    hidden_units_str = '230_27'
+    batch_size = 50
+    window_size = 3
+    conv_non_linear = 'tanh'
+    dimension = 50
+    inputdir = 'gap_40_len_80'
+    norm = 0
 
 
     hu_str = hidden_units_str.split('_')
@@ -432,8 +443,8 @@ if __name__ == "__main__":
         import dataset
         dataset.data2pickle(inputdir+'/train_filtered.data', inputdir+'/train.p')
 
-    testData = pickle.load(open(inputdir+'/test.p'))
-    trainData = pickle.load(open(inputdir+'/train.p'))
+    testData = pickle.load(open(inputdir+'/test.p', 'rb'))
+    trainData = pickle.load(open(inputdir+'/train.p', 'rb'))
     # testData = testData[1:5]
     # trainData = trainData[1:15]
     tmp = inputdir.split('_')
