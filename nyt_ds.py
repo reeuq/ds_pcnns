@@ -200,7 +200,7 @@ def train_conv_net(train,
         new_train = train
 
     new_train = np.random.permutation(new_train)
-    n_train_batches = new_train.shape[0]/batch_size # batch number of train data
+    n_train_batches = new_train.shape[0]//batch_size # batch number of train data
 
     [train_rels, train_nums, train_sents, train_poss, train_eposs] = bags_decompose(new_train)
     [test_rels, test_nums, test_sents, test_poss, test_eposs] = bags_decompose(test)
@@ -453,7 +453,7 @@ if __name__ == "__main__":
     train = data2cv.make_idx_data_cv(trainData, window_size, int(tmp[3]))
 
     print('load Wv ...')
-    Wv = pickle.load(open(inputdir+'/'+str(dimension)+'/Wv.p'))
+    Wv = pickle.load(open(inputdir+'/'+str(dimension)+'/Wv.p', 'rb'))
 
     rng = np.random.RandomState(3435)
     PF1 = np.asarray(rng.uniform(low=-1, high=1, size=[101, 5]), dtype=theano.config.floatX)
