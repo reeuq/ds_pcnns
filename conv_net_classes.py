@@ -348,6 +348,8 @@ class LeNetConvPoolLayer(object):
         #self.poolsize = pool_size
         self.non_linear = non_linear
         self.max_window_len = max_window_len
+
+        # 参数初始化Xavier--begin
         # there are "num input feature maps * filter height * filter width"
         # inputs to each hidden unit
         fan_in = numpy.prod(filter_shape[1:])
@@ -365,6 +367,7 @@ class LeNetConvPoolLayer(object):
                 dtype=theano.config.floatX),borrow=True,name="W_conv")
         b_values = numpy.zeros((filter_shape[0],), dtype=theano.config.floatX)
         self.b = theano.shared(value=b_values, borrow=True, name="b_conv")
+        # 参数初始化Xavier--end
 
         # convolve input feature maps with filters
         conv_out = conv.conv2d(input=input, filters=self.W,filter_shape=self.filter_shape, image_shape=self.image_shape)

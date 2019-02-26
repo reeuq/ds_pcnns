@@ -132,20 +132,24 @@ def train_conv_net(train,
     # pool_size = (img_h-filter_hs+1, img_w-filter_w+1)
 
     # index = T.lscalar()
+    # 输入声明
     x = T.imatrix('x')
     p1 = T.imatrix('pf1')
     p2 = T.imatrix('pf2')
     pool_size = T.imatrix('pos')
     y = T.ivector('y')
 
+    # 变量声明
     Words = theano.shared(value=U, name="Words")
     PF1W = theano.shared(value=PF1, name="pf1w")
     PF2W = theano.shared(value=PF2, name="pf2w")
 
+    # word_embedding_matrix每次更新后，将第一行重置为全0
     zero_vec_tensor = T.vector()
     zero_vec = np.zeros(img_w)
     set_zero = theano.function([zero_vec_tensor], updates=[(Words, T.set_subtensor(Words[0,:], zero_vec_tensor))])
 
+    # position_embedding_matrix每次更新后，将第一行重置为全0
     zero_vec_tensor = T.vector()
     zero_vec_pf = np.zeros(pf_dim)
     set_zero_pf1 = theano.function([zero_vec_tensor], updates=[(PF1W, T.set_subtensor(PF1W[0,:], zero_vec_tensor))])
